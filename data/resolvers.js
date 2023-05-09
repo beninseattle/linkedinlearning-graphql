@@ -3,17 +3,41 @@ import { Widgets } from '../dbConnectors';
 
 const resolvers = {
   getProduct: ({ id }) => {
-    return new Promise((resolve) => {
-      Widgets.findById({_id: id}, (err, product) => {
-        if (err) reject(err)
-        else resolve(product)
-      })
-    });
+    try {
+      return Widgets.findById({_id: id});
+    } catch (err) {
+      reject(err);
+    }
+    // return new Promise((resolve) => {
+    //   Widgets.findById({_id: id}, (err, product) => {
+    //     if (err) reject(err)
+    //     else resolve(product)
+    //   })
+    // });
   },
   createProduct: ({input}) => {
-    // let id = require('crypto').randomBytes(10).toString('hex');
-    // productDB[id] = input;
-    // return new Product(id, input);
+    const newWidget = new Widgets({
+      name: input.name,
+      description: input.description,
+      price: input.price,
+      souldout: input.souldout,
+      inventory: input.inventory,
+      stores: input.stores,
+    });
+
+    newWidget.id = newWidget._id;
+
+    try {
+      return newWidget.save();
+    } catch (err) {
+      reject(err);
+    }
+    // return new Promise((resolve) => {
+    //   newWidget.save((err) => {
+    //     if (err) reject(err)
+    //     else resolve(newWidget)
+    //   });
+    // });
   }
 };
 
