@@ -8,12 +8,13 @@ const resolvers = {
     } catch (err) {
       reject(err);
     }
-    // return new Promise((resolve) => {
-    //   Widgets.findById({_id: id}, (err, product) => {
-    //     if (err) reject(err)
-    //     else resolve(product)
-    //   })
-    // });
+  },
+  getAllProducts: () => {
+    try {
+      return Widgets.find({});
+    } catch (err) {
+      reject(err);
+    }
   },
   createProduct: ({input}) => {
     const newWidget = new Widgets({
@@ -32,12 +33,21 @@ const resolvers = {
     } catch (err) {
       reject(err);
     }
-    // return new Promise((resolve) => {
-    //   newWidget.save((err) => {
-    //     if (err) reject(err)
-    //     else resolve(newWidget)
-    //   });
-    // });
+  },
+  updateProduct: ({input}) => {
+    try {
+      return Widgets.findOneAndUpdate({ _id: input.id }, input, { new: true });
+    } catch(err) {
+      reject(err);
+    }
+  },
+  deleteProduct: async ({id}) => {
+    try {
+      await Widgets.findByIdAndRemove(id);
+      return 'Deleted product: ' + id;
+    } catch (err) {
+      reject(err);
+    }
   }
 };
 
